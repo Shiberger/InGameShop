@@ -22,4 +22,6 @@ class ApiService {
       return 'Error: ${e.toString()}';
     }
   }
+
+  Future login(String text, String text2) async {}
 }

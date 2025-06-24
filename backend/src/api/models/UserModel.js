@@ -6,11 +6,13 @@ const userSchema = mongoose.Schema(
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    isAdmin: { type: Boolean, required: true, default: false }, // เพิ่มบรรทัดนี้
   },
   {
     timestamps: true,
   }
 );
+
 
 // เข้ารหัสรหัสผ่านก่อนบันทึก
 userSchema.pre('save', async function (next) {

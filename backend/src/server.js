@@ -2,11 +2,16 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
+// Import Routes
+const authRoutes = require('./api/routes/authRoutes');
+const productRoutes = require('./api/routes/productRoutes'); // เพิ่มบรรทัดนี้
 
 // Connect to Database
 connectDB();
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 
 // Debug middleware - ADD THIS FIRST
 app.use((req, res, next) => {
@@ -15,18 +20,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middlewares
-app.use(cors());
-app.use(express.json());
-
 // More debugging after JSON parsing
 app.use((req, res, next) => {
   console.log('Body after JSON parsing:', req.body);
   next();
 });
-
-// Import Routes
-const authRoutes = require('./api/routes/authRoutes');
 
 // Routes with debugging
 app.use('/api/auth', (req, res, next) => {
@@ -38,6 +36,10 @@ app.use('/api/auth', (req, res, next) => {
 app.get('/', (req, res) => {
   res.send('Welcome to In-Game Shop API!');
 });
+
+// Use the imported routes
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes); // เพิ่มบรรทัดนี้
 
 const PORT = process.env.PORT || 5000;
 
