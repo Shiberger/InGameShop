@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 // Import Routes
 const authRoutes = require('./api/routes/authRoutes');
 const productRoutes = require('./api/routes/productRoutes'); // เพิ่มบรรทัดนี้
+const orderRoutes = require('./api/routes/orderRoutes'); // เพิ่มบรรทัดนี้
 
 // Connect to Database
 connectDB();
@@ -39,7 +40,9 @@ app.get('/', (req, res) => {
 
 // Use the imported routes
 app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes); // เพิ่มบรรทัดนี้
+app.use('/api/products', productRoutes); 
+app.use('/api/orders', orderRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 

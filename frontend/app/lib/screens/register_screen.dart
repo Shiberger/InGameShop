@@ -1,31 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart'; // ตรวจสอบ Path ให้ถูกต้อง
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+// แก้ไขชื่อ Class ให้ตรงกับชื่อไฟล์
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  // สร้าง Controller แยกสำหรับแต่ละช่อง
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  void _login() {
-    // Logic การเรียก API จะมาอยู่ที่นี่
-    if (_formKey.currentState!.validate()) {
+  Future<void> _submit() async {
+    // ตรวจสอบ validation
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    _formKey.currentState!.save();
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // เรียกใช้ Provider เพื่อสมัครสมาชิก
+      await Provider.of<AuthProvider>(context, listen: false).register(
+        _usernameController.text,
+        _emailController.text,
+        _passwordController.text,
+      );
+
+      // ถ้าการสมัครสำเร็จ ให้กลับไปหน้าก่อนหน้า (Login) และแสดงข้อความ
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text('Registration successful! Please log in.'),
+          ),
+        );
+      }
+    } catch (error) {
+      // ถ้าเกิดข้อผิดพลาด ให้แสดง Dialog
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('An Error Occurred!'),
+            // ตัดคำว่า "Exception: " ที่ไม่จำเป็นออกไป
+            content: Text(error.toString().replaceFirst("Exception: ", "")),
+            actions: [
+              TextButton(
+                child: const Text('Okay'),
+                onPressed: () => Navigator.of(ctx).pop(),
+              )
+            ],
+          ),
+        );
+      }
+    }
+
+    if (mounted) {
       setState(() {
-        _isLoading = true;
-      });
-      print('Email: ${_emailController.text}');
-      print('Password: ${_passwordController.text}');
-      // จำลองการโหลด
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() {
-          _isLoading = false;
-        });
+        _isLoading = false;
       });
     }
   }
@@ -33,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Register')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -41,17 +85,20 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // *** จุดที่แก้ไข *** ใช้ _usernameController
               TextFormField(
-                controller: _emailController,
+                controller: _usernameController,
                 decoration: const InputDecoration(labelText: 'Username'),
                 keyboardType: TextInputType.text,
                 validator: (value) {
-                  if (value == null || value.isEmpty || !value.contains('@')) {
-                    return 'Please enter a Username';
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a username';
                   }
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
+              // *** จุดที่แก้ไข *** ใช้ _emailController
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(labelText: 'Email'),
@@ -76,18 +123,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
               const SizedBox(height: 24),
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: _login,
-                      child: const Text('Login'),
-                    ),
-              TextButton(
-                onPressed: () {
-                  // Logic ไปหน้า Register
-                },
-                child: const Text('Don\'t have an account? Register'),
-              )
+              if (_isLoading)
+                const CircularProgressIndicator()
+              else
+                ElevatedButton(
+                  onPressed: _submit, // เรียกใช้ฟังก์ชัน _submit
+                  child: const Text('Register'),
+                ),
             ],
           ),
         ),
