@@ -109,7 +109,7 @@ flutter pub get
 flutter run
 ```
 
-##💡 Future Improvements
+## 💡 Future Improvements
 Order History: A screen for users to view their past orders.
 
 Admin Panel: A web-based dashboard for administrators to manage products, view all orders, and manage users.
