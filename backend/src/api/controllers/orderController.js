@@ -15,9 +15,13 @@ const createOrder = asyncHandler(async (req, res) => {
   const order = new Order({
     user: req.user._id, // ได้มาจาก authMiddleware
     orderItems: orderItems.map(item => ({
-        ...item,
-        product: item.id, // สมมติว่า frontend ส่ง id ของ product มา
-        _id: undefined // ป้องกันไม่ให้ client กำหนด _id เอง
+      name: item.name,
+      qty: item.qty,
+      image: item.image,
+      price: item.price,
+      // --- จุดแก้ไข ---
+      // เปลี่ยนจาก item.id เป็น item.product เพื่อให้ตรงกับที่ Frontend ส่งมา
+      product: item.product, 
     })),
     totalPrice,
   });
