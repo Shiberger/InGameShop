@@ -6,17 +6,6 @@ This project was created to demonstrate a comprehensive understanding of full-st
 
 ---
 
-## 📸 Application Screenshots
-
-> _Recommendation: Add beautiful screenshots or GIFs of your application here to give viewers an immediate overview of the project._
-
-- Login Screen  
-- Home Screen  
-- Cart Screen  
-- Payment Screen  
-
----
-
 ## ✨ Key Features
 
 ### 🔐 Authentication System:
@@ -117,6 +106,16 @@ Admin Panel: A web-based dashboard for administrators to manage products, view a
 Push Notifications: Notify users upon successful payment or when their order status changes.
 
 Product Search & Filtering: Implement functionality to search for products by name and filter by category or price.
+
+---
+
+## 📸 Application Screenshots
+
+<img src="https://github.com/user-attachments/assets/407dff09-65a7-4662-a0e8-2ac927063e71" width="200">
+<img src="https://github.com/user-attachments/assets/12cd0064-2959-4d38-b5c9-5cebee548e4a" width="200">
+<img src="https://github.com/user-attachments/assets/a553b63b-b9fb-47ff-a0bd-63c90fd96cff" width="200">
+<img src="https://github.com/user-attachments/assets/57cd7b6e-60bd-4b64-8257-74cc6c17f787" width="200">
+<img src="https://github.com/user-attachments/assets/bcaee96e-0785-4ee2-9a62-5dd7e963f902" width="200">
 
 
 
